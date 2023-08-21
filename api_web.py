@@ -13,6 +13,9 @@ from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
 
+# cros
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
 origins = [
