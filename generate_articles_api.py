@@ -58,16 +58,20 @@ def get_content(url):
     except:
         return None
 
-
-def build_prompt(content, n_chars=1000):
-    return f"""以下はとあるWebページのコンテンツである。内容を以下のような見出しでまとめてHTML形式で返してください。
+# n_chars=600の値を変えると生成される文章量が変わる
+def build_prompt(content, n_chars=600):
+    return f"""以下はとあるWebページのコンテンツである。内容を以下のような見出しでまとめてHTML形式で返してください。なお対象者はリスト形式でお願いします。
 下記はあくまでサンプル
 <h2>特徴</h2>
 <p>テキスト</p>
 <h2>使用例</h2>
 <p>テキスト</p>
 <h2>対象者</h2>
-<p>テキスト</p>
+<ul>
+    <li>箇条書き1</li>
+    <li>箇条書き2</li>
+    <li>箇条書き3</li>
+</ul>
 <h2>ツールの説明</h2>
 <p>テキスト</p>
 <h2>料金プラン</h2>
