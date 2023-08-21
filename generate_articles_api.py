@@ -59,19 +59,19 @@ def get_content(url):
         return None
 
 
-def build_prompt(content, n_chars=300):
+def build_prompt(content, n_chars=1000):
     return f"""以下はとあるWebページのコンテンツである。内容を以下のような見出しでまとめてHTML形式で返してください。
-
+下記はあくまでサンプル
 <h2>特徴</h2>
-<p>Magicianは、Figma向けのAIパワードデザインツールです。このツールは、デザインプロセスを効率化し、ユーザーがより迅速に、より効果的にデザインを作成することを可能にします。</p>
+<p>テキスト</p>
 <h2>使用例</h2>
-<p>Magicianは、Figmaでのデザイン作業を効率化するためのツールとして使用されます。具体的な使用例については、ウェブサイトには詳細が提供されていませんが、一般的には、デザインの生成、編集、最適化などのタスクを助けることが期待できます。</p>
+<p>テキスト</p>
 <h2>対象者</h2>
-<p>Magicianは、Figmaユーザー、特にデザイン作業を効率化したいデザイナーや開発者にとって有用なツールです。</p>
+<p>テキスト</p>
 <h2>ツールの説明</h2>
-<p>Magicianは、Figma向けのAIパワードデザインツールです。このツールは、デザインプロセスを効率化し、ユーザーがより迅速に、より効果的にデザインを作成することを可能にします。具体的な機能や操作方法については、ウェブサイトには詳細が提供されていません。</p>
+<p>テキスト</p>
 <h2>料金プラン</h2>
-<p>Magicianは、月額$5または年額$49で利用できます。これには、早期アクセス、21日間の無料試用期間、すべての魔法の呪文（おそらく特定の機能やツールを指しています）、すべての将来の更新が含まれます。</p>
+<p>テキスト</p>
 
 ========
 
@@ -83,7 +83,7 @@ def build_prompt(content, n_chars=300):
 """
 
 
-@app.post("/summarize")
+@app.post("/generate-article")
 def summarize(query: UrlQuery):
     url = query.url
     is_valid_url = validate_url(url)
@@ -99,6 +99,6 @@ def summarize(query: UrlQuery):
         with get_openai_callback() as cb:
             answer = llm(messages)
         
-        return {"summary": answer.content}
+        return {"generate-article": answer.content}
     else:
         return {"error": "something went wrong"}
