@@ -13,6 +13,9 @@ from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
 
+from markdown import markdown
+
+
 # cros
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -60,13 +63,18 @@ def get_content(url):
 
 
 def build_prompt(content, n_chars=300):
-    return f"""以下はとあるWebページのコンテンツである。内容を以下の見出しでそれぞれまとめてください。
+    return f"""以下はとあるWebページのコンテンツである。内容を以下のような見出しでまとめてHTML形式で返してください。
 
-- ## ツール名
-- ## 特徴
-- ## 使用例
-- ## 対象者(箇条書き)
-- ## ツールの説明
+<h2>特徴</h2>
+<p>Magicianは、Figma向けのAIパワードデザインツールです。このツールは、デザインプロセスを効率化し、ユーザーがより迅速に、より効果的にデザインを作成することを可能にします。</p>
+<h2>使用例</h2>
+<p>Magicianは、Figmaでのデザイン作業を効率化するためのツールとして使用されます。具体的な使用例については、ウェブサイトには詳細が提供されていませんが、一般的には、デザインの生成、編集、最適化などのタスクを助けることが期待できます。</p>
+<h2>対象者</h2>
+<p>Magicianは、Figmaユーザー、特にデザイン作業を効率化したいデザイナーや開発者にとって有用なツールです。</p>
+<h2>ツールの説明</h2>
+<p>Magicianは、Figma向けのAIパワードデザインツールです。このツールは、デザインプロセスを効率化し、ユーザーがより迅速に、より効果的にデザインを作成することを可能にします。具体的な機能や操作方法については、ウェブサイトには詳細が提供されていません。</p>
+<h2>料金プラン</h2>
+<p>Magicianは、月額$5または年額$49で利用できます。これには、早期アクセス、21日間の無料試用期間、すべての魔法の呪文（おそらく特定の機能やツールを指しています）、すべての将来の更新が含まれます。</p>
 
 ========
 
@@ -77,6 +85,9 @@ def build_prompt(content, n_chars=300):
 日本語で書いてね！
 """
 
+def convert_to_html(summary):
+    # Markdown形式のテキストをHTMLに変換
+    return markdown(summary)
 
 @app.post("/summarize")
 def summarize(query: UrlQuery):
@@ -94,6 +105,9 @@ def summarize(query: UrlQuery):
         with get_openai_callback() as cb:
             answer = llm(messages)
         
-        return {"summary": answer.content}
+        # Markdown形式の要約をHTMLに変換
+        html_summary = convert_to_html(answer.content)
+        
+        return {"summary": html_summary}
     else:
         return {"error": "something went wrong"}
