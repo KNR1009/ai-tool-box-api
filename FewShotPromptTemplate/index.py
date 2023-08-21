@@ -28,23 +28,27 @@ tools = [
     },
 ]
 
+# プロンプトのテンプレートを定義（ツール名、概要、使用例をフォーマットするためのテンプレート）
+
 tool_formatter_template = """
 ツール名: {tool_name}
 概要: {summary}
 使用例: {examples}\n
 """
+
+# PromptTemplateクラスを使ってプロンプトを作成
 tool_prompt = PromptTemplate(
     template=tool_formatter_template,
     input_variables=["tool_name", "summary", "examples"],
 )
 
 few_shot_prompt = FewShotPromptTemplate(
-    examples=tools,
-    example_prompt=tool_prompt,
-    prefix="ツールの詳細を教えて。",
-    suffix="ツール名: {input}\n概要:",
-    input_variables=["input"],
-    example_separator="\n\n",
+    examples=tools, # モデルに学習する具体的な例を提供するリスト
+    example_prompt=tool_prompt, # 与えられた例をフォーマットするためのPromptTemplateインスタンス
+    prefix="ツールの詳細を教えて。", # プロンプトの冒頭に追加する固定のテキスト
+    suffix="ツール名: {input}\n概要:", # 各入力例の後に追加されるテキスト
+    input_variables=["input"], # 入力変数の名前のリスト
+    example_separator="\n\n", # 例を区切るために使用される文字列
 )
 
 prompt_text = few_shot_prompt.format(input="Youtube")
