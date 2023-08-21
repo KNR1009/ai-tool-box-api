@@ -13,9 +13,6 @@ from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
 
-from markdown import markdown
-
-
 # cros
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -85,9 +82,6 @@ def build_prompt(content, n_chars=300):
 日本語で書いてね！
 """
 
-def convert_to_html(summary):
-    # Markdown形式のテキストをHTMLに変換
-    return markdown(summary)
 
 @app.post("/summarize")
 def summarize(query: UrlQuery):
@@ -105,9 +99,6 @@ def summarize(query: UrlQuery):
         with get_openai_callback() as cb:
             answer = llm(messages)
         
-        # Markdown形式の要約をHTMLに変換
-        html_summary = convert_to_html(answer.content)
-        
-        return {"summary": html_summary}
+        return {"summary": answer.content}
     else:
         return {"error": "something went wrong"}
