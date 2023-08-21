@@ -13,8 +13,20 @@ from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
 
+# cros
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# .envよりファイルを取得
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 model_name = "gpt-3.5-turbo"  # または "gpt-3.5-turbo"
