@@ -1,18 +1,13 @@
 # 必要なライブラリとモジュールをインポート
 from fastapi import FastAPI
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import (
-    SystemMessage,
-    HumanMessage,
-    AIMessage
-)
 from langchain.callbacks import get_openai_callback
 from pydantic import BaseModel
-from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 
 # CORS対応のためのミドルウェアをインポート
 from fastapi.middleware.cors import CORSMiddleware
