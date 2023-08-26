@@ -62,8 +62,18 @@ def get_content(url):
         return None
 
 # ChatGPTに送信するためのプロンプトを作成する関数
-def build_prompt(content, n_chars=600):
-    return f"""...（省略）..."""
+def build_prompt(content, n_chars=300):
+    return f"""以下はとある。Webページのコンテンツである。内容を「## ツール名」「## 特徴」「## 使用例」「## 対象者(箇条書き)」「## ツールの説明」の見出しでそれぞれまとめてください
+
+========
+
+{content[:1000]}
+
+========
+
+日本語で書いてね！
+"""
+
 
 # URLを受け取り、その内容を要約するAPIエンドポイントを定義
 @app.post("/generate-article")
