@@ -1,7 +1,7 @@
 from langchain.document_loaders import SeleniumURLLoader
 
 urls = [
-    "https://udemy.benesse.co.jp/development/langchain.html",
+    "https://aisaas.pkshatech.com/chatbot",
 ]
 
 loader = SeleniumURLLoader(urls=urls)

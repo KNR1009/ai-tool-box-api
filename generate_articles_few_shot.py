@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 from langchain import PromptTemplate, FewShotPromptTemplate, OpenAI
 from langchain.callbacks import get_openai_callback
 from langchain.schema import SystemMessage, HumanMessage
+from langchain.document_loaders import SeleniumURLLoader
+
 
 # CORS対応のためのミドルウェアをインポート
 from fastapi.middleware.cors import CORSMiddleware
@@ -99,18 +101,15 @@ def validate_url(url):
 
 ## 指定されたURLのコンテンツを取得する関数
 def get_content(url):
+    urls = [url]
     try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        if soup.main:
-            return soup.main.get_text()
-        elif soup.article:
-            return soup.article.get_text()
-        else:
-            return soup.body.get_text()
-    except:
+        loader = SeleniumURLLoader(urls=urls)
+        data = loader.load()
+        return data
+    except Exception as e:  # ここを修正
+        print(f"Error occurred: {e}")
         return None
-      
+
 
 # URLを受け取り、その内容を要約するAPIエンドポイントを定義
 @app.post("/generate-article")
