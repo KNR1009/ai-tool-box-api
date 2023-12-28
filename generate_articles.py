@@ -1,18 +1,14 @@
-# 必要なライブラリとモジュールをインポート
+# 環境変数やAPI
 from fastapi import FastAPI
 from pydantic import BaseModel
-import requests
-from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
-from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
 
 # langchain
 from langchain import PromptTemplate, FewShotPromptTemplate, OpenAI
-from langchain.callbacks import get_openai_callback
-from langchain.schema import SystemMessage, HumanMessage
 from langchain.document_loaders import SeleniumURLLoader
-
 
 # CORS対応のためのミドルウェアをインポート
 from fastapi.middleware.cors import CORSMiddleware
